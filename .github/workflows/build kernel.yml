@@ -94,7 +94,7 @@ jobs:
          kernel
          BOARD=oec-box-wxy4 \
          BRANCH=vendor \
-         COMPRESS_OUTPUTIMAGE="gz"\
+         COMPRESS_OUTPUTIMAGE="gz" \
          KERNEL_CONFIGURE=linux-rk35xx-vendor
 
     - name: Check space usage
