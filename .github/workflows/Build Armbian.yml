@@ -10,4 +10,4 @@ jobs:
           armbian_token:     "${{ secrets.ARMBIAN_SELF_DISPATCH_TOKEN }}"  # GitHub token
           armbian_release:   "bookworm"                        # userspace
           armbian_target:    "kernel"                        # build=image, kernel=kernel
-          armbian_board:     "oec-box-wxy4"                   # build target
+          armbian_board:     "bananapim5"                   # build target
