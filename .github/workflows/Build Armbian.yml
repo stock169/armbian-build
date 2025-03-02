@@ -1,81 +1,104 @@
-name: "build-armbian"
+
+name: Armbian Builder
+
 on:
   repository_dispatch:
   workflow_dispatch:
-    inputs:
-      set_build_type:
-        descriptions: "build type nightly/stable"
-        required: false
-        default: "nightly"
-        type: choice
-        options:
-          - nightly
-          - stable
-      set_release:
-        description: "Select OS Release."
-        required: false
-        default: "jammy"
-        type: choice
-        options:
-          - jammy
-          - noble
-          - bullseye
-          - bookworm
-      set_target:
-        description: "Select build target."
-        required: false
-        default: "build"
-        type: choice
-        options:
-          - build
-          - kernel
-      set_ui:
-        description: "Select ui."
-        required: false
-        default: "gnome"
-        type: choice
-        options:
-          - minimal
-          - server
-          - xfce
-          - gnome
-      set_kernel_branch:
-        description: "Select kernel branch."
-        required: false
-        default: "current"
-        type: choice
-        options:
-          - current
-          - edge
-      set_armbian_branch:
-        description: "Select Armbian branch."
-        required: false
-
-      set_armbian_version:
-        description: "Set different version"
-        required: false
-
-      set_armbian_version_suffix:
-        description: "Set version suffix"
-        required: false
-        default: ""
-
 
 env:
+  REPO_URL: https://github.com/stock169/armbian-build
+  REPO_BRANCH: main
+  CONFIG_FILE: 
+  DIY_P1_SH: 
+  DIY_P2_SH: 
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+
 jobs:
-  build-armbian:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-22.04
+
     steps:
-      - uses: ophub/amlogic-s9xxx-armbian@main
-        with:
-          armbian_token: "${{secrets.GITHUB_TOKEN }}"  # GitHub token
-          armbian_release: "${{inputs.set_release}}"                        # userspace
-          armbian_target: "${{inputs.set_target}}"                        # build=image, kernel=kernel
-          armbian_board: "tpm312"                   # build target
-          armbian_ui: "${{inputs.set_ui}}"
-          armbian_kernel_branch: "${{inputs.set_kernel_branch}}"
-          armbian_branch: "${{inputs.set_armbian_branch}}"
-          armbian_version: "${{inputs.set_armbian_version}}"
-          armbian_version_suffix: "${{inputs.set_armbian_version_suffix}}"
-          build_type: "${{inputs.set_build_type}}"
+    - name: Checkout
+      uses: actions/checkout@main
+      
+    - name: install bc
+      run: |
+       sudo -E apt-get -qq update
+       sudo -E apt-get -qq install bc
+  
+    - name: Free Disk Space
+      uses: endersonmenezes/free-disk-space@main
+      with:
+          remove_android: true
+          remove_dotnet: true
+          remove_haskell: true
+          remove_tool_cache: true
+          remove_swap: true
+          remove_packages: "android* azure* clang* dotnet* firefox* ghc* golang* google* libclang* libgl1* lld* llvm* \
+            microsoft* mongodb* mono* mysql* nodejs* openjdk* php* postgresql* powershell* snap* temurin* yarn* zulu*"
+          remove_packages_one_command: true
+          remove_folders: "/etc/apt/sources.list.d* /etc/mono* /etc/mysql* /usr/include/linux/android* /usr/lib/llvm* /usr/lib/mono* \
+            /usr/local/lib/android* /usr/local/lib/node_modules* /usr/local/share/chromium* /usr/local/share/powershell* \
+            /usr/local/share/vcpkg/ports/azure* /usr/local/share/vcpkg/ports/google* /usr/local/share/vcpkg/ports/libpq/android* \
+            /usr/local/share/vcpkg/ports/llvm* /usr/local/share/vcpkg/ports/mysql* /usr/local/share/vcpkg/ports/snap* \
+            /usr/share/azure* /usr/share/dotnet* /usr/share/glade* /usr/share/miniconda* /usr/share/php* /usr/share/swift \
+            /var/lib/mysql* /var/log/azure*"
+          testing: false
+          
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+        sudo docker image prune --all --force
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install setuptools pyelftools unidiff GitPython unidecode coloredlogs PyYAML oras Jinja2 rich dtschema yamllint
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH main
+        ln -sf /workdir/armbian $GITHUB_WORKSPACE/armbian
+        cd armbian
+        cd ..
+
+    - name: Load custom diy
+      run: |
+       chmod +x $DIY_P1_SH
+       cd armbian
+       $GITHUB_WORKSPACE/$DIY_P1_SH
+
+ 
+    #- name: Load custom configuration
+    #  run: |
+    #    [ -e files ] && mv files CoreELEC/files
+    #    [ -e $CONFIG_FILE ] && mv $CONFIG_FILE CoreELEC/projects/Amlogic-ce/devices/Amlogic-no/linux/linux.aarch64.conf
+        
+    - name: Compile the firmware
+      id: compile
+      run: |
+        cd armbian
+         ./compile.sh \
+         BOARD=oec-box-wxy4 \
+         BRANCH=current \
+         RELEASE=bookworm \
+         BUILD_DESKTOP=no \
+
+    - name: Check space usage
+      if: (!cancelled())
+      run: df -hT
+
+    - name: Release Firmware
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: CoreELEC-Amlogic-no.aarch64-22.0-Piers_devel
+        files: ./CoreELEC/target/*Generic.img.gz
