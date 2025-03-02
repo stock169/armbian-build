@@ -111,3 +111,4 @@ jobs:
         tag_name: Armbian-oec-box-wxy4
         files: |
            ./armbian/output/images/*.*
+           ./armbian/output/debs/*.*
