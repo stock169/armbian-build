@@ -91,7 +91,7 @@ jobs:
       run: |
         cd armbian
          ./compile.sh \
-         kernel
+         kernel \
          BOARD=oec-box-wxy4 \
          BRANCH=vendor \
          COMPRESS_OUTPUTIMAGE="gz" \
