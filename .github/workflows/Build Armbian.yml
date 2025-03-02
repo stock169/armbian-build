@@ -74,11 +74,11 @@ jobs:
         cd armbian
         cd ..
 
-    - name: Load custom diy
-      run: |
-       chmod +x $DIY_P1_SH
-       cd armbian
-       $GITHUB_WORKSPACE/$DIY_P1_SH
+    #- name: Load custom diy
+    #  run: |
+    #   chmod +x $DIY_P1_SH
+    #   cd armbian
+    #   $GITHUB_WORKSPACE/$DIY_P1_SH
 
  
     #- name: Load custom configuration
