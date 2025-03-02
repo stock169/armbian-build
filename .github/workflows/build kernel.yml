@@ -1,5 +1,5 @@
 
-name: Armbian Builder
+name: kernel Builder
 
 on:
   repository_dispatch:
