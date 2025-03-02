@@ -34,8 +34,8 @@ function post_family_config__oec-box-wxy4_use_mainline_uboot() {
 
 function post_family_config__oec-box-wxy4_kernel() {
 	display_alert "$BOARD" "mainline BOOTPATCHDIR" "info"
-	if [[ ${BRANCH} = "Stable" ]] ; then
-		KERNELPATCHDIR="rockchip-6.1-wxy4"
+	if [[ ${BRANCH} = "legacy" ]] ; then
+		KERNELPATCHDIR="rockchip-5.10-wxy4"
 	else
 		KERNELPATCHDIR="rockchip-6.1-wxy4"
 	fi	
