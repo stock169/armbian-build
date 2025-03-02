@@ -95,6 +95,7 @@ jobs:
          BRANCH=current \
          RELEASE=bookworm \
          BUILD_DESKTOP=no \
+         KERNEL_CONFIGURE=linux-rk35xx-vendor
 
     - name: Check space usage
       if: (!cancelled())
