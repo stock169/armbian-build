@@ -92,7 +92,7 @@ jobs:
         cd armbian
          ./compile.sh \
          BOARD=oec-box-wxy4 \
-         BRANCH=Stable \
+         BRANCH=vendor \
          RELEASE=bookworm \
          BUILD_MINIMAL=yes \
          BUILD_DESKTOP=no \
