@@ -107,4 +107,4 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         tag_name: Armbian-oec-box-wxy4
-        files: output/images/*.*
+        files: ./armbian/output/images/*.*
