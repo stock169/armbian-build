@@ -92,7 +92,7 @@ jobs:
         cd armbian
          ./compile.sh \
          BOARD=oec-box-wxy4 \
-         BRANCH=current \
+         BRANCH=legacy \
          RELEASE=bookworm \
          BUILD_DESKTOP=no \
          KERNEL_CONFIGURE=linux-rk35xx-vendor
