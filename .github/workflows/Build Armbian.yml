@@ -5,7 +5,7 @@ jobs:
   build-armbian:
     runs-on: ubuntu-latest
     steps:
-      - uses: stock169/armbian-build@main
+      - uses: wxzmz/armbian-build@main
         with:
           armbian_token:     "${{ secrets.ARMBIAN_SELF_DISPATCH_TOKEN }}"  # GitHub token
           armbian_release:   "noble"                        # userspace
