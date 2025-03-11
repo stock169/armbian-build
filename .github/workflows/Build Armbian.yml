@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/stock169/build
+  REPO_URL: https://github.com/stock169/armbian-build
   REPO_BRANCH: main
   CONFIG_FILE: 
   DIY_P1_SH: 
