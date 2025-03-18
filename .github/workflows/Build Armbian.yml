@@ -89,7 +89,7 @@ jobs:
          HOST=armbian \
          NETWORKING_STACK="network-manager" \
          COMPRESS_OUTPUTIMAGE="sha" \
-         KERNEL_CONFIGURE=no
+         KERNEL_CONFIGURE=linux-6.1.75-vendor-rk35xx.config
          cd output/images
          gzip *.img
          cd ..
@@ -102,7 +102,7 @@ jobs:
     - name: Release Firmware
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: Armbian-oec-box-wxy4
+        tag_name: Armbian-oec-box-wxy4-iscsi
         files: |
            ./build/output/images/*.gz
            ./build/output/debs/*.*
