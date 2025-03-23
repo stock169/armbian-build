@@ -182,7 +182,7 @@ index 000000000000..aa1291f3ff5e
 +
 +		green-led {
 +			gpios = <&gpio3 RK_PB4 1>;
-+			default-state = "on";
++			default-state = "off";
 +		};
 +
 +		red-led {
