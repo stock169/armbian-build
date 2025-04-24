@@ -83,7 +83,7 @@ jobs:
          BRANCH=vendor \
          RELEASE=noble \
          BUILD_MINIMAL=no \
-         BUILD_DESKTOP=yes \
+         BUILD_DESKTOP=no \
          EXPERT=yes \
          BUILD_ONLY=default \
          HOST=armbian \
