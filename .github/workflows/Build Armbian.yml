@@ -80,7 +80,7 @@ jobs:
         cd build
          ./compile.sh \
          BOARD=oec-box-wxy4 \
-         BRANCH=edge \
+         BRANCH=vendor \
          RELEASE=noble \
          BUILD_MINIMAL=no \
          BUILD_DESKTOP=no \
@@ -89,7 +89,7 @@ jobs:
          HOST=armbian \
          NETWORKING_STACK="network-manager" \
          COMPRESS_OUTPUTIMAGE="sha" \
-         KERNEL_CONFIGURE=linux-rockchip-edge.config
+         KERNEL_CONFIGURE=linux-rk35xx-vendor.config
          cd output/images
          gzip *.img
          cd ..
