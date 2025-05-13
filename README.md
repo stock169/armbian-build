@@ -26,7 +26,7 @@
 - Superuser rights (configured sudo or root access).
 - Make sure your system is up-to-date! Outdated Docker binaries, for example, can cause trouble.
 
-For stable branch use `--branch=v24.11`
+For stable branch use `--branch=v25.02`
 
 ```bash
 apt-get -y install git
@@ -184,8 +184,7 @@ Function | Armbian | Yocto | Buildroot |
 |       └── u-boot-family                For entire kernel family
 ├── tools                                Tools for dealing with kernel patches and configs
 └── userpatches                          User: configuration patching area
-    ├── lib.config                       User: framework common config/override file
-    ├── config-default.conf              User: default user config file
+    ├── config-example.conf              User: example user config file
     ├── customize-image.sh               User: script will execute just before closing the image
     ├── atf                              User: ARM trusted firmware
     ├── kernel                           User: Linux kernel per kernel family

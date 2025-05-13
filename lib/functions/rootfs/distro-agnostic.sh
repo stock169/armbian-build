@@ -103,7 +103,7 @@ function install_distribution_agnostic() {
 	cp "${SDCARD}"/etc/skel/.bashrc "${SDCARD}"/root/
 	cp "${SDCARD}"/etc/skel/.profile "${SDCARD}"/root/
 
-	# Copy systemwide alieases to root user too
+	# Copy systemwide aliases to root user too
 	cp "${SRC}"/packages/bsp/common/etc/skel/.bash_aliases "${SDCARD}"/root/
 
 	# display welcome message at first root login which is ready by /usr/sbin/armbian/armbian-firstlogin
@@ -331,11 +331,6 @@ function install_distribution_agnostic() {
 		desktop_postinstall
 	fi
 
-	# install armbian-config
-	if [[ "${PACKAGE_LIST_RM}" != *armbian-config* ]]; then
-		install_artifact_deb_chroot "armbian-config"
-	fi
-
 	# install armbian-zsh
 	if [[ "${PACKAGE_LIST_RM}" != *armbian-zsh* ]]; then
 		if [[ $BUILD_MINIMAL != yes ]]; then
@@ -405,8 +400,8 @@ function install_distribution_agnostic() {
 	[[ -f "${SDCARD}"/lib/systemd/system/armbian-led-state.service ]] && chroot_sdcard systemctl --no-reload enable armbian-led-state.service
 
 	# switch to beta repository at this stage if building nightly images
-	if [[ $IMAGE_TYPE == nightly && -f "${SDCARD}"/etc/apt/sources.list.d/armbian.list ]]; then
-		sed -i 's/apt/beta/' "${SDCARD}"/etc/apt/sources.list.d/armbian.list
+	if [[ $IMAGE_TYPE == nightly && -f "${SDCARD}"/etc/apt/sources.list.d/armbian.sources ]]; then
+		sed -i 's/apt/beta/' "${SDCARD}"/etc/apt/sources.list.d/armbian.sources
 	fi
 
 	# fix for https://bugs.launchpad.net/ubuntu/+source/blueman/+bug/1542723 @TODO: from ubuntu 15. maybe gone?
