@@ -89,7 +89,7 @@ jobs:
          HOST=armbian \
          NETWORKING_STACK="network-manager" \
          COMPRESS_OUTPUTIMAGE="sha" \
-         KERNEL_CONFIGURE=linux-rk35xx-vendor.config
+         KERNEL_CONFIGURE=linux-rockchip-edge.config
          cd output/images
          gzip *.img
          cd ..
